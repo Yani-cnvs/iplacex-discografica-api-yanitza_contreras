@@ -30,10 +30,11 @@ public class ArtistaController {
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Artista> HandleInsertArtistaRequest(@RequestBody Artista artista) {
-        Artista temp = artistaRepo.save(artista);
-        return new ResponseEntity<>(temp, HttpStatus.CREATED);
-    }
+    public ResponseEntity<Artista> crearArtista(@RequestBody Artista artista) {
+    System.out.println("Artista recibido: " + artista);
+    Artista temp = artistaRepo.save(artista);
+    return new ResponseEntity<>(temp, HttpStatus.CREATED);
+}
 
     @GetMapping(
         value = "/artista/{id}",
