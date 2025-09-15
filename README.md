@@ -1,2 +1,1 @@
-# iplacex-discografica-api-yanitza_contreras
-API REST String Discografica 
+API REST Spring para administración de discografías favoritas de empleados de IPLACEX
