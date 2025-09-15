@@ -6,7 +6,7 @@ WORKDIR /app
 COPY ./build.gradle .
 COPY ./settings.gradle .
 
-COPY src ./src
+COPY ./discografia/src ./src
 
 RUN gradle build --no-daemon
 
