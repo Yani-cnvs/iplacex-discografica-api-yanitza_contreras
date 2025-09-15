@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
-
 public class ArtistaController {
 
     @Autowired
@@ -30,31 +30,30 @@ public class ArtistaController {
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Artista> HandleInsertArtistaRequest(@ResquestBody Artista artista) {
+    public ResponseEntity<Artista> HandleInsertArtistaRequest(@RequestBody Artista artista) {
         Artista temp = artistaRepo.save(artista);
-        return new ResponseEntity<>(temp, null, HttpStatus.CREATED);
+        return new ResponseEntity<>(temp, HttpStatus.CREATED);
     }
 
     @GetMapping(
         value = "/artista/{id}",
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Artista> HandleInsertArtistaRequest(@PathVariable("id") String id) {
+    public ResponseEntity<Artista> HandleGetArtistaById(@PathVariable("id") String id) {
         Optional<Artista> temp = artistaRepo.findById(id);
-        if (temp.isPresent()) {
-            return new ResponseEntity<>(null, HttpStatus.OK);
-        } 
-        return null;
+        return temp.map(artista -> new ResponseEntity<>(artista, HttpStatus.OK))
+                   .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
+
     @GetMapping(
         value = "/artistas",
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<Artista>> HandleGetArtistasRequest() {
         List<Artista> artistas = artistaRepo.findAll();
-        return new ResponseEntity<>(artistas, null, HttpStatus.OK);
+        return new ResponseEntity<>(artistas, HttpStatus.OK);
     }
-    
+
     @PutMapping(
         value = "/artista/{id}",
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -65,12 +64,12 @@ public class ArtistaController {
         @RequestBody Artista artista
     ) {
         if(!artistaRepo.existsById(id)) {
-            return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        artista._id = id;
+        artista.set_id(id);
         Artista temp = artistaRepo.save(artista);
-        return new ResponseEntity<>(temp, null, HttpStatus.OK);
+        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
     @DeleteMapping(
@@ -83,6 +82,6 @@ public class ArtistaController {
         }
 
         artistaRepo.deleteById(id);
-        return new ResponseEntity<>(null, null, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
